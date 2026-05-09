@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>五行陣 — 專案管理</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<!-- ══════════════════════════════════
+     首頁 — 專案列表
+══════════════════════════════════ -->
+<div id="page-home" class="page active">
+
+  <nav class="nav-bar">
+    <div class="nav-logo">五<span>行</span>陣</div>
+    <div class="nav-btns">
+      <button class="btn btn-ghost btn-sm" onclick="app_requestNotif()">🔔 開啟通知</button>
+    </div>
+  </nav>
+
+  <div class="home-header">
+    <h1 class="home-title">五行陣</h1>
+    <p class="home-subtitle">WUXING PROJECT COMMAND</p>
+  </div>
+
+  <div class="home-actions">
+    <button class="btn btn-primary" onclick="app_showNewProjectModal()">⚔️ 新增專案</button>
+  </div>
+
+  <div class="projects-grid" id="projects-grid">
+    <div class="empty-state">
+      <div class="empty-icon">⚔️</div>
+      <p>載入中...</p>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     戰鬥畫面
+══════════════════════════════════ -->
+<div id="page-battle" class="page">
+
+  <!-- 頂部資訊列 -->
+  <div class="battle-header">
+    <button class="battle-back" onclick="app_loadHome()">← 返回</button>
+    <div class="battle-project-name" id="battle-project-name">載入中...</div>
+    <div class="battle-progress-wrap">
+      <div class="battle-progress-bar">
+        <div class="battle-progress-fill" id="battle-progress-fill" style="width:0%"></div>
+      </div>
+      <span class="battle-progress-pct" id="battle-progress-pct">0%</span>
+    </div>
+    <div class="battle-header-btns">
+      <button class="btn btn-ghost btn-sm" onclick="app_toggleTaskPanel()">📋 任務</button>
+    </div>
+  </div>
+
+  <!-- 戰鬥主體 -->
+  <div class="battle-main">
+
+    <!-- 左側：怪物區 -->
+    <div class="battle-left">
+      <div id="monster-container"></div>
+    </div>
+
+    <!-- 右側：人物區 -->
+    <div class="battle-right">
+      <div class="chars-grid" id="chars-grid"></div>
+    </div>
+
+    <!-- 底部：操作面板 -->
+    <div class="battle-bottom">
+
+      <!-- 左下：人物選擇 -->
+      <div class="char-selector">
+        <div class="char-selector-title">選擇發言者</div>
+        <div id="char-selector-list"></div>
+      </div>
+
+      <!-- 右下：對話區 -->
+      <div class="chat-area">
+        <div class="chat-display" id="chat-display"></div>
+        <div class="chat-input-row">
+          <input id="chat-input" type="text" placeholder="輸入問題或指令...">
+          <button class="chat-update-btn" onclick="app_allUpdate()">現況更新</button>
+          <button class="chat-send-btn" onclick="app_sendChat()">發出</button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     任務面板（側邊抽屜）
+══════════════════════════════════ -->
+<div class="task-panel" id="task-panel">
+  <div class="task-panel-header">
+    <div class="task-panel-title">📋 任務清單</div>
+    <button class="task-panel-close" onclick="app_toggleTaskPanel()">✕</button>
+  </div>
+  <div class="task-add-row">
+    <input id="new-task-title" type="text" placeholder="新增任務...">
+    <input id="new-task-due" type="date" style="width:130px">
+    <button class="btn btn-primary btn-sm" onclick="app_addTask()">+</button>
+  </div>
+  <div class="task-list" id="task-list"></div>
+</div>
+
+<!-- ══════════════════════════════════
+     新增專案 Modal
+══════════════════════════════════ -->
+<div class="modal-overlay" id="modal-new-project" onclick="event.target===this&&app_closeNewProjectModal()">
+  <div class="modal-box">
+    <button class="modal-close" onclick="app_closeNewProjectModal()">✕</button>
+    <div class="modal-title">⚔️ 新增專案</div>
+    <div class="new-project-form">
+      <div>
+        <label>專案名稱 *</label>
+        <input id="new-project-name" type="text" placeholder="例：2025產品上線">
+      </div>
+      <div>
+        <label>專案描述</label>
+        <textarea id="new-project-desc" placeholder="簡短描述這個專案的目標與內容..."></textarea>
+      </div>
+      <p style="font-size:0.78rem;color:var(--gray)">AI 將根據專案內容自動生成對應怪物 👾</p>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="app_closeNewProjectModal()">取消</button>
+      <button class="btn btn-primary" id="btn-create-project" onclick="app_createProject()">建立</button>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     對話詳細 Modal
+══════════════════════════════════ -->
+<div class="modal-overlay" id="modal-chat" onclick="event.target===this&&app_closeModal('modal-chat')">
+  <div class="modal-box">
+    <button class="modal-close" onclick="app_closeModal('modal-chat')">✕</button>
+    <div class="modal-sender" id="modal-chat-sender"></div>
+    <div class="modal-content" id="modal-chat-content"></div>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════
+     Scripts
+══════════════════════════════════ -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase.js"></script>
+<script src="characters.js"></script>
+<script src="monster.js"></script>
+<script src="notification.js"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

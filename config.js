@@ -1,2 +1,3 @@
 const SUPABASE_URL = 'https://hhcubvixldieuwdeqnwc.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhoY3Vidml4bGRpZXV3ZGVxbndjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzU1NjcyNDYsImV4cCI6MjA5MTE0MzI0Nn0.zkWxfm0FugSEL9zW6pwDFWPqmRJ3ystOZfU8yRL2lPo';
+const CLAUDE_API_KEY = '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';

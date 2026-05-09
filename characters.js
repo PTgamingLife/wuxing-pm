@@ -1,7 +1,13 @@
 // characters.js — 人物設定載入 & Claude API 互動
 
 const CLAUDE_API = 'https://api.anthropic.com/v1/messages';
-const CLAUDE_MODEL = 'claude-sonnet-4-20250514';
+const CLAUDE_MODEL = 'claude-sonnet-4-5';
+const CLAUDE_HEADERS = () => ({
+  'Content-Type': 'application/json',
+  'x-api-key': CLAUDE_API_KEY,
+  'anthropic-version': '2023-06-01',
+  'anthropic-dangerous-direct-browser-access': 'true'
+});
 
 // 人物清單定義
 const char_LIST = {
@@ -70,7 +76,7 @@ async function char_chat(key, userMessage, projectData, tasks, history = []) {
 
   const resp = await fetch(CLAUDE_API, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: CLAUDE_HEADERS(),
     body: JSON.stringify({
       model: CLAUDE_MODEL,
       max_tokens: 1000,
@@ -105,7 +111,7 @@ async function char_allSpeak(projectData, tasks) {
 
     const resp = await fetch(CLAUDE_API, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: CLAUDE_HEADERS(),
       body: JSON.stringify({
         model: CLAUDE_MODEL,
         max_tokens: 1000,
@@ -139,7 +145,7 @@ async function char_generateMonster(projectName, projectDesc) {
 
   const resp = await fetch(CLAUDE_API, {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
+    headers: CLAUDE_HEADERS(),
     body: JSON.stringify({
       model: CLAUDE_MODEL,
       max_tokens: 1000,

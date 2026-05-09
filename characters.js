@@ -1,13 +1,8 @@
 // characters.js — 人物設定載入 & Claude API 互動
 
-const CLAUDE_API = 'https://api.anthropic.com/v1/messages';
+const CLAUDE_API = 'https://hhcubvixldieuwdeqnwc.supabase.co/functions/v1/proxy-claude';
 const CLAUDE_MODEL = 'claude-sonnet-4-5';
-const CLAUDE_HEADERS = () => ({
-  'Content-Type': 'application/json',
-  'x-api-key': CLAUDE_API_KEY,
-  'anthropic-version': '2023-06-01',
-  'anthropic-dangerous-direct-browser-access': 'true'
-});
+const CLAUDE_HEADERS = () => ({ 'Content-Type': 'application/json' });
 
 // 人物清單定義
 const char_LIST = {

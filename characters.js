@@ -1,7 +1,7 @@
 // characters.js — 人物設定載入 & Claude API 互動
 
 const CLAUDE_API = 'https://hhcubvixldieuwdeqnwc.supabase.co/functions/v1/proxy-claude';
-const CLAUDE_MODEL = 'claude-sonnet-4-5';
+const CLAUDE_MODEL = 'claude-haiku-4-5-20251001';
 const CLAUDE_HEADERS = () => ({ 'Content-Type': 'application/json' });
 
 // 人物清單定義
@@ -148,6 +148,7 @@ async function char_generateMonster(projectName, projectDesc) {
     })
   });
   const data = await resp.json();
+  if (!resp.ok || !data.content) throw new Error(data.error?.message || JSON.stringify(data));
   const raw = data.content[0].text.replace(/```json|```/g, '').trim();
   return JSON.parse(raw);
 }
